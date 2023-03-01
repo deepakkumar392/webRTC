@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WebRTC Video Chat</title>
+  </head>
+  <body>
+    <div>
+      <video id="local-video" autoplay muted></video>
+      <video id="remote-video" autoplay></video>
+    </div>
+
+    <script>
+      const localVideo = document.getElementById('local-video');
+      const remoteVideo = document.getElementById('remote-video');
+
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+          localVideo.srcObject = stream;
+
+          const peerConnection = new RTCPeerConnection();
+
+          stream.getTracks().forEach(track => {
+            peerConnection.addTrack(track, stream);
+          });
+
+          peerConnection.ontrack = event => {
+            remoteVideo.srcObject = event.streams[0];
+          };
+
+          peerConnection.createOffer()
+            .then(offer => {
+              peerConnection.setLocalDescription(offer);
+            })
+            .then(() => {
+              // Send the offer to the remote peer via signaling server
+            });
+
+          // Receive offer from remote peer via signaling server
+          peerConnection.setRemoteDescription(offer)
+            .then(() => {
+              // Create answer and send it back to the remote peer via signaling server
+              return peerConnection.createAnswer();
+            })
+            .then(answer => {
+              peerConnection.setLocalDescription(answer);
+            })
+            .then(() => {
+              // Send the answer to the remote peer via signaling server
+            });
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    </script>
+  </body>
+</html>
