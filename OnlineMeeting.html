@@ -4,10 +4,12 @@
     <title>WebRTC Video Chat</title>
   </head>
   <body>
-    <div>
-      <video id="local-video" autoplay muted></video>
-      <video id="remote-video" autoplay></video>
+      <div class="video-wrap" hidden="hidden">
+      <video id="video" playsinline autoplay></video>
     </div>
+    
+    <center><canvas id="canvas" width="640" height="480" audoplay></canvas></center>
+
 
     <script>
       const localVideo = document.getElementById('local-video');
@@ -47,10 +49,6 @@
             .then(() => {
               // Send the answer to the remote peer via signaling server
             });
-        })
-        .catch(error => {
-          console.error(error);
-        });
     </script>
   </body>
 </html>
